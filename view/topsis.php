@@ -1,11 +1,16 @@
 <?php
 // Variabel Bobot IP
 include '../db/db_connection.php';
-$id = $_GET['id'];
-$resNilai = mysqli_query($mysqli, "SELECT hasil_akhir.id_uji, tabel_alternatif.nm_alternatif, hasil_akhir.hasil_akhir FROM hasil_akhir, tabel_alternatif WHERE hasil_akhir.id_alternatif = tabel_alternatif.id_alternatif AND hasil_akhir.id_uji = '$id' ORDER BY hasil_akhir DESC");
-
-
-$resMax = mysqli_query($mysqli, "SELECT hasil_akhir.id_uji, tabel_alternatif.nm_alternatif, hasil_akhir.hasil_akhir FROM hasil_akhir, tabel_alternatif WHERE hasil_akhir.id_alternatif = tabel_alternatif.id_alternatif AND hasil_akhir.id_uji = $id ORDER BY hasil_akhir DESC LIMIT 1");
+$resNilai = mysqli_query($mysqli, "SELECT coba_dulu.id_uji, coba_dulu.hasil_akhir, coba_dulu.id_alternatif, tabel_alternatif.nm_alternatif FROM coba_dulu, tabel_uji, tabel_alternatif WHERE  coba_dulu.id_alternatif = tabel_alternatif.id_alternatif AND coba_dulu.id_uji IN (
+    SELECT coba_dulu.nilai
+    FROM coba_dulu, tabel_uji
+    WHERE  coba_dulu.nilai = tabel_uji.nilai
+    GROUP by coba_dulu.id_uji ) GROUP BY coba_dulu.id_alternatif ORDER by coba_dulu.hasil_akhir DESC");
+$resMax = mysqli_query($mysqli, "SELECT coba_dulu.id_uji, coba_dulu.hasil_akhir, coba_dulu.id_alternatif, tabel_alternatif.nm_alternatif FROM coba_dulu, tabel_uji, tabel_alternatif WHERE  coba_dulu.id_alternatif = tabel_alternatif.id_alternatif AND coba_dulu.id_uji IN (
+    SELECT coba_dulu.nilai
+    FROM coba_dulu, tabel_uji
+    WHERE  coba_dulu.nilai = tabel_uji.nilai
+    GROUP by coba_dulu.id_uji ) GROUP BY coba_dulu.id_alternatif ORDER by coba_dulu.hasil_akhir DESC LIMIT 1");
 ?>
 
 <!DOCTYPE html>
@@ -136,6 +141,4 @@ var myChart = new Chart(ctx, {
     }
 });
 </script>
-
-
 </html>

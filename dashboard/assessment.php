@@ -2,6 +2,8 @@
 include '../db/db_connection.php';
 $resQuestion = mysqli_query($mysqli, "SELECT * FROM tabel_soal ORDER BY `id_alternatif`");
 $resMatkul = mysqli_query($mysqli, "SELECT * FROM tabel_matkul ORDER BY `id_alternatif`");
+$resNilai = mysqli_query($mysqli, "SELECT * FROM `tabel_penilaian` GROUP BY id_uji");
+$newVal = mysqli_num_rows($resNilai) + 1;
 ?>
 <!doctype html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
@@ -153,7 +155,7 @@ $resMatkul = mysqli_query($mysqli, "SELECT * FROM tabel_matkul ORDER BY `id_alte
                 <div class="page-content" width=80%;>
         
         <div class="form-v10-content">
-			<form class="form-detail" action="topsis.php" method="post" id="myform">
+			<form class="form-detail" action="learn.php" method="post" id="myform">
 				<div class="form-left mb-4">
 					<h2>Questioner</h2>
 					<div class="form-row">
@@ -211,6 +213,7 @@ $resMatkul = mysqli_query($mysqli, "SELECT * FROM tabel_matkul ORDER BY `id_alte
 							<!-- Table body -->
 						</table>
 						<!-- Table  -->
+                        <input type="text" id="idUji" name="idUji" value="<?php echo $newVal?>" hidden>
 					</div>
 				</div>
 				<div class="form-right">
